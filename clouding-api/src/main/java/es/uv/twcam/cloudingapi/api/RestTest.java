@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 @RestController()
-@RequestMapping("api/test")
+@RequestMapping("/api/test")
 public class RestTest {
 
 
 
-    @GetMapping("/")
+    @GetMapping
     public String getTest() {
-        return "Hello testing api";
+        return "Hello, This is app with mysql";
     }
     
     
