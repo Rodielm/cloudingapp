@@ -1,18 +1,19 @@
 version: '3'
 
 services:
-  airlineapp:
-    container_name: airlinesapp
+  cloudingapp:
+    container_name: cloudingapp
     build:
-      context: ./airlines-app
+      context: ./clouding-api/
       dockerfile: Dockerfile
-    image: twcammaster.uv.es/proyecto-2-airlinesapp
+    image: twcammaster.uv.es/proyecto-2-cloudingapp
+    deploy:
+      replicas: 2
     ports:
       - "8080:8080"
     networks:
-      - airlines-network
+      - clouding-network
     depends_on:
-      - discovery
       - mysqldb
       - nginx
     environment:
@@ -22,32 +23,20 @@ services:
       - DATABASE_NAME=airlinedb1
       - DATABASE_PORT=3306
 
-  airlinesmongo:
-    container_name: airlines-reactiveapp
+  cloudingreactive:
+    container_name: cloudingreactive
     build:
-      context: ./airlines-reactive-app
+      context: ./clouding-reactive/
       dockerfile: Dockerfile
-    image: twcammaster.uv.es/proyecto-2-airlines-reactiveapp
+    image: twcammaster.uv.es/proyecto-2-cloudingreactive
+    deploy:
+      replicas: 2
     ports:
       - "8081:8081"
     networks:
-      - airlines-network
+      - clouding-network
     depends_on:
-      - discovery
       - dbmongo
-      - nginx
-
-  discovery:
-    container_name: airlines-server
-    build:
-      context: ./discovery-server
-      dockerfile: Dockerfile
-    image: twcammaster.uv.es/proyecto-2-discovery
-    ports:
-      - "8761:8761"
-    networks:
-      - airlines-network
-    depends_on:
       - nginx
 
   mysqldb:
@@ -57,7 +46,7 @@ services:
     volumes:
       - mysqldata:/var/lib/mysql
     networks:
-      - airlines-network
+      - clouding-network
     command: --max_allowed_packet=32505856
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -69,10 +58,10 @@ services:
 
   dbmongo:
     image: mongo
-    expose:
-      - "27017"
+    ports:
+      - "27017:27017"
     networks:
-      - airlines-network
+      - clouding-network
     volumes:
       - mongodata:/data/db
     depends_on:
@@ -80,18 +69,19 @@ services:
 
   nginx:
     build:
-      context: ./ScriptCloud/nginx
+      context: ./clouding-script/nginx
       dockerfile: Dockerfile
     image: twcammaster.uv.es/proyecto-2-nginx
+    deploy:
+      replicas: 2
     ports:
       - "80:80"
     networks:
-      - airlines-network
+      - clouding-network
     restart: always
 
 networks:
-  airlines-network:
-    driver: bridge
+  clouding-network:
 volumes:
   mysqldata:
   mongodata:
