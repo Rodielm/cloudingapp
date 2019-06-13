@@ -1,0 +1,97 @@
+version: '3'
+
+services:
+  airlineapp:
+    container_name: airlinesapp
+    build:
+      context: ./airlines-app
+      dockerfile: Dockerfile
+    image: twcammaster.uv.es/proyecto-2-airlinesapp
+    ports:
+      - "8080:8080"
+    networks:
+      - airlines-network
+    depends_on:
+      - discovery
+      - mysqldb
+      - nginx
+    environment:
+      - DATABASE_HOST=mysqldb
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=airlinedb1
+      - DATABASE_PORT=3306
+
+  airlinesmongo:
+    container_name: airlines-reactiveapp
+    build:
+      context: ./airlines-reactive-app
+      dockerfile: Dockerfile
+    image: twcammaster.uv.es/proyecto-2-airlines-reactiveapp
+    ports:
+      - "8081:8081"
+    networks:
+      - airlines-network
+    depends_on:
+      - discovery
+      - dbmongo
+      - nginx
+
+  discovery:
+    container_name: airlines-server
+    build:
+      context: ./discovery-server
+      dockerfile: Dockerfile
+    image: twcammaster.uv.es/proyecto-2-discovery
+    ports:
+      - "8761:8761"
+    networks:
+      - airlines-network
+    depends_on:
+      - nginx
+
+  mysqldb:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - airlines-network
+    command: --max_allowed_packet=32505856
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=airlines
+      - MYSQL_PASSWORD=root
+    restart: always
+    depends_on:
+      - nginx
+
+  dbmongo:
+    image: mongo
+    expose:
+      - "27017"
+    networks:
+      - airlines-network
+    volumes:
+      - mongodata:/data/db
+    depends_on:
+      - nginx
+
+  nginx:
+    build:
+      context: ./ScriptCloud/nginx
+      dockerfile: Dockerfile
+    image: twcammaster.uv.es/proyecto-2-nginx
+    ports:
+      - "80:80"
+    networks:
+      - airlines-network
+    restart: always
+
+networks:
+  airlines-network:
+    driver: bridge
+volumes:
+  mysqldata:
+  mongodata:
