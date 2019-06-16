@@ -1,7 +1,7 @@
 package es.uv.twcam.cloudingapi.services.impl;
 
-
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,8 +40,8 @@ public class EntityServiceImpl implements EntityService<Airplane> {
     }
 
     @Override
-    public Airplane findById(Integer id) {
-        return airplaneRepo.findById(id).get();
+    public Optional<Airplane> findById(Integer id) {
+        return airplaneRepo.findById(id);
     }
 
     

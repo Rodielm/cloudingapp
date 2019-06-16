@@ -1,7 +1,7 @@
 package es.uv.twcam.cloudingapi.services;
 
-
 import java.util.List;
+import java.util.Optional;
 
 
 
@@ -12,7 +12,7 @@ public interface EntityService<T> {
 
     public List<T> getAll();
 
-    public T findById(Integer id);
+    public Optional<T> findById(Integer id);
 
     public void delete(Integer id);
 
