@@ -3,6 +3,7 @@ package es.uv.twcam.cloudingreactive.collection;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,7 +16,7 @@ import lombok.Data;
 @Document(collection = "storeControl")
 @TypeAlias("store_control")
 @Data
-public class StoreControl {
+public class StoreControl extends AbstractDocument<ObjectId> {
 
     private String aeropuertoId;
     private String reservationId;

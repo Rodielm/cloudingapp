@@ -28,7 +28,7 @@ public class StoreControlImpl implements CollectionService<StoreControl> {
     }
 
     @Override
-    public Mono<StoreControl> update(StoreControl e) {
+    public Mono<StoreControl> save(StoreControl e) {
         return storeControlRepository.save(e);
     }
 

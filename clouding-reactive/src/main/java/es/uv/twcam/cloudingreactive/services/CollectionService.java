@@ -14,7 +14,7 @@ Flux<T> findAll();
 
 Mono<T> findById(ObjectId id);
 
-Mono<T> update(T e);
+Mono<T> save(T e);
 
 Mono<T> add(T e);
 
