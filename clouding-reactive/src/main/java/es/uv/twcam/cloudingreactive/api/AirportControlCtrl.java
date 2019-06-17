@@ -33,6 +33,10 @@ public class AirportControlCtrl {
         return airportService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public  Mono<AirportControl> getById(@PathVariable ObjectId id){
+        return airportService.findById(id);
+    }
 
     @PutMapping()
     public Mono<AirportControl> update(@RequestBody AirportControl e) {
