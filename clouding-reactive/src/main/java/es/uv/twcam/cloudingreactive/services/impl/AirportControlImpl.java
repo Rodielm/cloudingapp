@@ -25,7 +25,7 @@ public class AirportControlImpl implements CollectionService<AirportControl> {
     }
 
     @Override
-    public Mono<Void> update(AirportControl e) {
+    public Mono<AirportControl> update(AirportControl e) {
         return null;
     }
 
