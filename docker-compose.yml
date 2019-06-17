@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   cloudingapp:
@@ -6,7 +6,7 @@ services:
     build:
       context: ./clouding-api/
       dockerfile: Dockerfile
-    image: twcammaster.uv.es/proyecto-2-cloudingapp
+    image: twcammaster.uv.es/proyecto-2-cloudingapp:latest
     deploy:
       replicas: 2
     ports:
@@ -28,7 +28,7 @@ services:
     build:
       context: ./clouding-reactive/
       dockerfile: Dockerfile
-    image: twcammaster.uv.es/proyecto-2-cloudingreactive
+    image: twcammaster.uv.es/proyecto-2-cloudingreactive:latest
     deploy:
       replicas: 2
     ports:
@@ -49,7 +49,7 @@ services:
       - clouding-network
     command: --max_allowed_packet=32505856
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=airlines
       - MYSQL_PASSWORD=root
     restart: always
@@ -71,9 +71,9 @@ services:
     build:
       context: ./clouding-script/nginx
       dockerfile: Dockerfile
-    image: twcammaster.uv.es/proyecto-2-nginx
+    image: twcammaster.uv.es/proyecto-2-nginx:latest
     deploy:
-      replicas: 2
+      replicas: 2  
     ports:
       - "80:80"
     networks:
