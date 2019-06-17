@@ -1,4 +1,4 @@
-package es.uv.twcam.cloudingreactive.domain;
+package es.uv.twcam.cloudingreactive.collection;
 
 import java.util.Date;
 
