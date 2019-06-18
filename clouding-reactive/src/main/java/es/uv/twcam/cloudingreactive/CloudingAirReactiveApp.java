@@ -4,21 +4,30 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.github.javafaker.Faker;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import es.uv.twcam.cloudingreactive.collection.AirportControl;
 import es.uv.twcam.cloudingreactive.collection.StoreControl;
+import es.uv.twcam.cloudingreactive.services.CollectionService;
 
 @SpringBootApplication
 public class CloudingAirReactiveApp implements CommandLineRunner {
 
 
 	Faker faker = new Faker();
+	
+	@Autowired
+	private CollectionService<StoreControl> storeService;
+
+	@Autowired
+	private CollectionService<AirportControl> airportService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CloudingAirReactiveApp.class, args);
@@ -26,6 +35,11 @@ public class CloudingAirReactiveApp implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		airportService.deleteAll();
+		storeService.deleteAll();
+		generateAirportControl(10);
+		generatePurchaseControl(10);
 
 	}
 
@@ -65,7 +79,7 @@ public class CloudingAirReactiveApp implements CommandLineRunner {
 			airportControl.setSecurityCheck(past);
 			airportControl.setBoarding(future);
 			airportControl.setReservationId(Integer.valueOf(faker.bothify("######")));
-			// airportControlService.create(airportControl);
+			airportService.add(airportControl);
 		}
 
 	}
@@ -95,12 +109,12 @@ public class CloudingAirReactiveApp implements CommandLineRunner {
 				spend.add(Double.parseDouble(faker.commerce().price(10.00, 100.00)));
 			}
 
-			StoreControl purchaseControl = new StoreControl();
-			purchaseControl.setAeropuertoId(airport.get(faker.number().numberBetween(0, 4)));
-			purchaseControl.setPaymentDate(faker.date().between(before.getTime(), Calendar.getInstance().getTime()));
-			purchaseControl.setStoreId(faker.bothify("??##"));
-			purchaseControl.setSpend(spend);
-			// purchaseControlService.create(purchaseControl);
+			StoreControl storeControl = new StoreControl();
+			storeControl.setAeropuertoId(airport.get(faker.number().numberBetween(0, 4)));
+			storeControl.setPaymentDate(faker.date().between(before.getTime(), Calendar.getInstance().getTime()));
+			storeControl.setStoreId(faker.bothify("??##"));
+			storeControl.setSpend(spend);
+			storeService.add(storeControl);
 			spend.clear();
 
 		}
