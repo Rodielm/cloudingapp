@@ -18,7 +18,7 @@ import es.uv.twcam.cloudingapi.services.EntityService;
 
 @Service
 @Transactional
-public class EntityServiceImpl implements EntityService<Airplane> {
+public class AirplaneServiceImpl implements EntityService<Airplane> {
  
     @Autowired
     private AirplaneRepo airplaneRepo;

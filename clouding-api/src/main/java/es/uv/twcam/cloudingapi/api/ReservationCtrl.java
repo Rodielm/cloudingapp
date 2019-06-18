@@ -25,7 +25,7 @@ public class ReservationCtrl {
 
 
     @Autowired
-    private EntityService<Reservation> ReservationService;
+    private EntityService<Reservation> reservationService;
 
     ReservationAssembler assembler;
 
@@ -37,7 +37,7 @@ public class ReservationCtrl {
     @GetMapping
     public ResponseEntity<?> getAll() {
 
-        List<Resource<Reservation>> airplanes = ReservationService.getAll().stream().map(assembler::toResource)
+        List<Resource<Reservation>> airplanes = reservationService.getAll().stream().map(assembler::toResource)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(airplanes, HttpStatus.OK);
@@ -46,7 +46,7 @@ public class ReservationCtrl {
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Integer id) {
         
-        return ReservationService.findById(id)
+        return reservationService.findById(id)
         .map(assembler::toResource)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
@@ -54,7 +54,7 @@ public class ReservationCtrl {
 
     @PostMapping
     public Reservation add(@RequestBody Reservation Reservation) {
-        return ReservationService.save(Reservation);
+        return reservationService.save(Reservation);
     }
 
     @PutMapping("/{id}")
@@ -67,7 +67,7 @@ public class ReservationCtrl {
 
     @DeleteMapping
     public void deleteReservation(@PathVariable Integer id) {
-        ReservationService.delete(id);
+        reservationService.delete(id);
     }
     
 }
