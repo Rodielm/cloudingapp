@@ -10,5 +10,5 @@ import es.uv.twcam.cloudingapi.entities.User;
 
 public interface UserRepo extends JpaRepository<User,Integer > {
 
-    
+   public User findByUsername(String username);
 }
