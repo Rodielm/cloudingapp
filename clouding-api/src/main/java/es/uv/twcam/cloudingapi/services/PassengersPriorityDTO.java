@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PassengersPriorityDTO implements Serializable {
 	
+	private static final long serialVersionUID = -3748933256798614249L;
+
 	private String id;
 	
 	private String name;

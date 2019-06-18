@@ -1,6 +1,8 @@
 package es.uv.twcam.cloudingapi.api;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,12 @@ import es.uv.twcam.cloudingapi.entities.Reservation;
 import es.uv.twcam.cloudingapi.services.EntityService;
 import es.uv.twcam.cloudingapi.services.assembler.ReservationAssembler;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 /**
  * ReservationCtrl
  */
 public class ReservationCtrl {
-
 
     @Autowired
     private EntityService<Reservation> reservationService;
@@ -45,29 +48,39 @@ public class ReservationCtrl {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Integer id) {
-        
-        return reservationService.findById(id)
-        .map(assembler::toResource)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+
+        return reservationService.findById(id).map(assembler::toResource).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Reservation add(@RequestBody Reservation Reservation) {
-        return reservationService.save(Reservation);
+    public ResponseEntity<?> add(@RequestBody Reservation reservation) {
+        Reservation reserved = reservationService.save(reservation);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(reserved.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
+
     }
 
     @PutMapping("/{id}")
-    public Reservation updateReservation(@PathVariable Integer id, @RequestBody Reservation entity) {
-        Reservation reservation = new Reservation();
-        reservation = entity;
-        reservation.setId(id);
-        return reservation;
+    public ResponseEntity<?> updateReservation(@PathVariable Integer id, @RequestBody Reservation entity) {
+
+        Optional<Reservation> reservation = reservationService.findById(id);
+
+        if (!reservation.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        entity.setId(id);
+        reservationService.save(entity);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
     public void deleteReservation(@PathVariable Integer id) {
         reservationService.delete(id);
     }
-    
+
 }
