@@ -22,8 +22,7 @@ import es.uv.twcam.cloudingapi.services.ProfitFlightsDTO;
 @Repository
 public interface ReservationRepo extends JpaRepository<Reservation,Integer>{
 
-    public Optional<Reservation> findByPassengerIdAndReservationId(Integer passenger, Integer reservation);
-	public Optional<Reservation> findByReservationId(Integer reservation);
+   public Optional<Reservation> findById(Integer reservation);
 
 	// Q3-1
 	@Query("Select r from Reservation r  inner join r.flight f where f.arrivalDate > :today and r.user.id = :userId ")
@@ -36,13 +35,13 @@ public interface ReservationRepo extends JpaRepository<Reservation,Integer>{
 			@Param("userId") Integer userId);
 
 	// Q6
-	@Query("SELECT new uv.airlines.app.service.dto.PassengersPriorityDTO(p.id, p.name, p.lastname,  COUNT(p)) "
+	@Query("SELECT new es.uv.twcam.cloudingapi.service.PassengersPriorityDTO(p.id, p.name, p.lastname,  COUNT(p)) "
 			+ "FROM Reservation r " + "INNER JOIN r.passenger p " + "where r.priority = 1 "
 			+ "GROUP BY p.id " + "HAVING COUNT(p) > ?1")
 	public List<PassengersPriorityDTO> getPassengerPriority(Integer priority);
 
 	// Q7
-	@Query("SELECT new uv.airlines.app.service.dto.ProfitFlightsDTO(A.municipality, A.continent, A.id, SUM(RP.flightRate)) "
+	@Query("SELECT es.uv.twcam.cloudingapi.ProfitFlightsDTO(A.municipality, A.continent, A.id, SUM(RP.flightRate)) "
 			+ "FROM Reservation r INNER JOIN R.flight f "
 			+ "INNER JOIN f.airportArrival A " + "WHERE r.reservationDate BETWEEN :start AND :end "
 			+ "GROUP BY f.airportArrival " + "ORDER BY SUM(r.flightRate) DESC")
@@ -50,8 +49,8 @@ public interface ReservationRepo extends JpaRepository<Reservation,Integer>{
 			@Param("end") Date endDate);
     
 	// Q8
-	@Query("SELECT new uv.airlines.app.service.dto.MonthlyProfitsDTO(YEAR(R.reservationDate), MONTH(R.reservationDate), sum(RP.flightRate)) "
-			+ "FROM Reservation GROUP BY YEAR(R.reservationDate), MONTH(R.reservationDate) "
+	@Query("SELECT new es.uv.twcam.cloudingapi.service.MonthlyProfitsDTO(YEAR(R.reservationDate), MONTH(R.reservationDate), sum(R.price)) "
+			+ "FROM Reservation R GROUP BY YEAR(R.reservationDate), MONTH(R.reservationDate) "
 			+ "ORDER BY YEAR(R.reservationDate), MONTH(R.reservationDate) DESC")
 	public List<MonthlyProfitsDTO> getMonthlyProfits(Pageable pageable);
 

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.uv.twcam.cloudingapi.entities.Airplane;
-import es.uv.twcam.cloudingapi.repositories.AirplaneRepo;
+import es.uv.twcam.cloudingapi.entities.Flight;
+import es.uv.twcam.cloudingapi.repositories.FlightRepo;
 import es.uv.twcam.cloudingapi.services.EntityService;
 
 
@@ -18,29 +18,30 @@ import es.uv.twcam.cloudingapi.services.EntityService;
 
 @Service
 @Transactional
-public class AirplaneServiceImpl implements EntityService<Airplane> {
+public class FlightServiceImpl implements EntityService<Flight> {
  
     @Autowired
-    private AirplaneRepo airplaneRepo;
+    private FlightRepo FlightRepo;
 
     @Override
-    public List<Airplane> getAll() {
-        return airplaneRepo.findAll();
+    public List<Flight> getAll() {
+        return FlightRepo.findAll();
     }
+
   
     @Override
     public void delete(Integer id) {
-        airplaneRepo.deleteById(id);
+        FlightRepo.deleteById(id);
     }
 
     @Override
-    public Airplane save(Airplane entity) {
-        return airplaneRepo.save(entity);
+    public Flight save(Flight entity) {
+        return FlightRepo.save(entity);
     }
 
     @Override
-    public Optional<Airplane> findById(Integer id) {
-        return airplaneRepo.findById(id);
+    public Optional<Flight> findById(Integer id) {
+        return FlightRepo.findById(id);
     }
 
     

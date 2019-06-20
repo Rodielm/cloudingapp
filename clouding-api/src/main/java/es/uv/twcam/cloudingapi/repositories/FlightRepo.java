@@ -17,15 +17,14 @@ public interface FlightRepo extends JpaRepository<Flight, Integer> {
 
 
 	/* Q1 */
-	@Query("SELECT f FROM Flight f "
-            + "WHERE f.takeoff.id = :takeoffId AND f.arrival.id = :arrivalId"
-            + "AND f.takeoffDate > :fechaMin AND f.takeoffDate < :fechaMax "
-			+ " AND f.airplane.capacity > (select count(*) from f.Reservations r where r.flight.id = f.flight.id)")
-	List<Flight> retrieveByFiltersAndFreePax(@Param("takeoffId") String idOrigen,
-			@Param("idDestino") String idDestino,
-			@Param("reservar") Integer plazas,
-			@Param("fechaMin") Date fechaMin,
-			@Param("fechaMax") Date fechaMax);
+	// @Query("SELECT f FROM Flight f "
+    //         + "WHERE f.takeoff.id = :takeoffId AND f.arrival.id = :arrivalId"
+    //         + "AND f.takeoffDate > :fechaMin AND f.takeoffDate < :fechaMax "
+	// 		+ " AND f.airplane.capacity > (select count(*) from f.Reservations r where r.flight.id = f.flight.id)")
+	// List<Flight> retrieveByFiltersAndFreePax(@Param("takeoffId") String idOrigen,
+	// 		@Param("arrivalId") String idDestino,
+	// 		@Param("fechaMin") Date fechaMin,
+	// 		@Param("fechaMax") Date fechaMax);
 	
 	@Query(value="SELECT * FROM Flight f "
 			+ "WHERE f.takeoffDate BETWEEN DATE_SUB(:date, INTERVAL 3 DAY) AND DATE_ADD(:fecha, INTERVAL 3 DAY) "

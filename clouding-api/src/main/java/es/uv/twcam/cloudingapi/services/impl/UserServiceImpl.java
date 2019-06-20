@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.uv.twcam.cloudingapi.entities.User;
 import es.uv.twcam.cloudingapi.repositories.UserRepo;
@@ -12,6 +14,9 @@ import es.uv.twcam.cloudingapi.services.EntityService;
 /**
  * UserServiceImpl
  */
+
+@Service
+@Transactional
 public class UserServiceImpl implements EntityService<User> {
 
     @Autowired
